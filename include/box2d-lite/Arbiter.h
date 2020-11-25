@@ -81,6 +81,10 @@ struct Arbiter
 
 	// Combined friction
 	float friction;
+	
+	// 상태 저장 변수 추가
+	// (빙판)
+	static bool flag2;
 };
 
 // This is used by std::set

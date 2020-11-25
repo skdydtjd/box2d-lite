@@ -13,6 +13,9 @@
 #include "box2d-lite/Body.h"
 #include "box2d-lite/World.h"
 
+//Arbiter 헤더파일에 선언했던 변수를 불러옴
+bool Arbiter::flag2 = false;
+
 Arbiter::Arbiter(Body* b1, Body* b2)
 {
 	if (b1 < b2)
@@ -27,8 +30,16 @@ Arbiter::Arbiter(Body* b1, Body* b2)
 	}
 
 	numContacts = Collide(contacts, body1, body2);
-
-	friction = sqrtf(body1->friction * body2->friction);
+	
+	// flag2에 따른 빙판 
+	if(flag2 == true)
+	{
+		friction = 0;
+	}
+	else
+	{
+		friction = sqrtf(body1->friction * body2->friction);
+	}
 }
 
 void Arbiter::Update(Contact* newContacts, int numNewContacts)

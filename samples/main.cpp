@@ -629,7 +629,6 @@ static void Keyboard(GLFWwindow* window, int key, int scancode, int action, int 
 		Moter(moterOper);
 		break;
 
-
 		// 일시정지 기능 추가 (s키를 누를 시)
 	case GLFW_KEY_S:
 		flag = !flag;
@@ -639,6 +638,8 @@ static void Keyboard(GLFWwindow* window, int key, int scancode, int action, int 
 	case GLFW_KEY_I:
 		Arbiter::flag2 = !Arbiter::flag2;
 		break;
+
+		// 두 강체 던지기
 	case GLFW_KEY_T:
 		test();
 		break;

@@ -41,7 +41,7 @@ struct World
 	static bool accumulateImpulses;
 	static bool warmStarting;
 	static bool positionCorrection;
-	static bool Moter;	//¸ğÅÍ ÀÛµ¿ ¹®±¸¿ë
+	static bool Moter;	// ëª¨í„° ì‘ë™ ë¬¸êµ¬ìš©
 };
 
 #endif

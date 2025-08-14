@@ -32,8 +32,8 @@ namespace
 	Joint joints[100];
 
 	Body* bomb = NULL;
-	Body* moter = NULL;			//¸ğÅÍ Body
-	static bool moterOper = false;		//¸ğÅÍ È¸Àü°ü·Ã bool
+	Body* moter = NULL;			//ëª¨í„° Body
+	static bool moterOper = false;		//ëª¨í„° íšŒì „ê´€ë ¨ bool
 
 	float timeStep = 1.0f / 60.0f;
 	int iterations = 10;
@@ -51,8 +51,8 @@ namespace
 
 	World world(gravity, iterations);
 
-	//»óÅÂ ÀúÀå º¯¼ö Ãß°¡
-	// (ÀÏ½ÃÁ¤Áö)
+	//ìƒíƒœ ì €ì¥ ë³€ìˆ˜ ì¶”ê°€
+	// (ì¼ì‹œì •ì§€)
 	bool flag = false;
 }
 
@@ -120,6 +120,7 @@ static void DrawJoint(Joint* joint)
 	glEnd();
 }
 
+// ë‘ ê°•ì²´ë¥¼ ë˜ì ¸ ë¶€ë”›íˆê²Œ í•˜ëŠ” ê¸°ëŠ¥
 static void test()
 {
 
@@ -162,8 +163,8 @@ static void LaunchBomb()
 	bomb->isItExist = true;
 }
 
-//¸ğÅÍ »ı¼º LaunchBomb()ÀÇ Çü½ÄÀ» °¡Á®¿È.
-//ÀÔ·Â ÆÄ¶ó¹ÌÅÍ´Â È¸ÀüÀ» ½ÃÅ³Áö ¸»Áö¸¦ °áÁ¤ÇÏ°Ô ÇÔ.
+//ëª¨í„° ìƒì„± LaunchBomb()ì˜ í˜•ì‹ì„ ê°€ì ¸ì˜´.
+//ì…ë ¥ íŒŒë¼ë¯¸í„°ëŠ” íšŒì „ì„ ì‹œí‚¬ì§€ ë§ì§€ë¥¼ ê²°ì •í•˜ê²Œ í•¨.
 static void const Moter(bool oper)
 {
 	if (!moter)
@@ -575,7 +576,7 @@ static void InitDemo(int index)
 	numBodies = 0;
 	numJoints = 0;
 	bomb = NULL;
-	moter = NULL;		//Demo º¯°æ ½Ã °°ÀÌ ÃÊ±âÈ­
+	moter = NULL;		//Demo ë³€ê²½ ì‹œ ê°™ì´ ì´ˆê¸°í™”
 
 	demoIndex = index;
 	demos[index](bodies, joints);
@@ -623,18 +624,18 @@ static void Keyboard(GLFWwindow* window, int key, int scancode, int action, int 
 		LaunchBomb();
 		break;
 
-	case GLFW_KEY_M:		//¸ğÅÍ ÀÛµ¿¿ë
+	case GLFW_KEY_M:		//ëª¨í„° ì‘ë™ìš©
 		moterOper = !moterOper;
 		Moter(moterOper);
 		break;
 
 
-		// ÀÏ½ÃÁ¤Áö ±â´É Ãß°¡ (sÅ°¸¦ ´©¸¦ ½Ã)
+		// ì¼ì‹œì •ì§€ ê¸°ëŠ¥ ì¶”ê°€ (sí‚¤ë¥¼ ëˆ„ë¥¼ ì‹œ)
 	case GLFW_KEY_S:
 		flag = !flag;
 		break;
 
-		// ºùÆÇ ±â´É Ãß°¡ (iÅ°¸¦ ´©¸¦ ½Ã)
+		// ë¹™íŒ ê¸°ëŠ¥ ì¶”ê°€ (ií‚¤ë¥¼ ëˆ„ë¥¼ ì‹œ)
 	case GLFW_KEY_I:
 		Arbiter::flag2 = !Arbiter::flag2;
 		break;
@@ -755,15 +756,15 @@ int main(int, char**)
 		sprintf(buffer, "(W)arm Starting %s", World::warmStarting ? "ON" : "OFF");
 		DrawText(5, 125, buffer);
 
-		// ÀÏ½ÃÁ¤Áö ¹®±¸ Ãß°¡
+		// ì¼ì‹œì •ì§€ ë¬¸êµ¬ ì¶”ê°€
 		sprintf(buffer, "(S)top %s", flag ? "ON" : "OFF");
 		DrawText(5, 155, buffer);
 
-		// ºùÆÇ ¹®±¸ Ãß°¡
+		// ë¹™íŒ ë¬¸êµ¬ ì¶”ê°€
 		sprintf(buffer, "(I)ce plane %s", Arbiter::flag2 ? "ON" : "OFF");
 		DrawText(5, 185, buffer);
 
-		//¸ğÅÍ ÀÛµ¿ ¹®±¸, 3¹øÂ° ÆÄ¶ó¹ÌÅÍ´Â World¿¡ »ı¼ºÇØ¾ß ÇÔ.
+		//ëª¨í„° ì‘ë™ ë¬¸êµ¬, 3ë²ˆì§¸ íŒŒë¼ë¯¸í„°ëŠ” Worldì— ìƒì„±í•´ì•¼ í•¨.
 		sprintf(buffer, "(M)oter %s", World::Moter ? "ON" : "OFF");
 		DrawText(5, 215, buffer);
 
@@ -774,7 +775,7 @@ int main(int, char**)
 		glLoadIdentity();
 
 
-		// flag¿¡ µû¸¥ ÀÏ½ÃÁ¤Áö ¿©ºÎ
+		// flagì— ë”°ë¥¸ ì¼ì‹œì •ì§€ ì—¬ë¶€
 		if (flag == true)
 		{
 			world.Step(0);

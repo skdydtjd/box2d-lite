@@ -26,6 +26,8 @@ Body::Body()
 	invMass = 0.0f;
 	I = FLT_MAX;
 	invI = 0.0f;
+
+	// 생성자에 의한 변수 초기화
 	isBreakAble = true;
 	impulseLimit = 400.0f;
 	isItExist = true;
@@ -43,8 +45,11 @@ void Body::Set(const Vec2& w, float m)
 
 	width = w;
 	mass = m;
+
+	// 초기화
 	impulseLimit = 400.0f;
 	isItExist = true;
+	
 	if (mass < FLT_MAX)
 	{
 		invMass = 1.0f / mass;
@@ -58,6 +63,8 @@ void Body::Set(const Vec2& w, float m)
 		invMass = 0.0f;
 		I = FLT_MAX;
 		invI = 0.0f;
+
+		//초기화
 		isBreakAble = false;
 	}
 }

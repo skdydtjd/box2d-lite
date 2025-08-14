@@ -15,7 +15,7 @@ Box2D-Lite is a small 2D physics engine. It was developed for the [2006 GDC Phys
 
 # 코드 분석 및 추가, 개선한 부분
 
-빙판 시스템, 시간 정지, 모터 시스템, 
+빙판 시스템, 시간 정지, 모터 시스템, 두 강체를 던지는 기능, 충돌 판정 추가
 
 담당한 구현 부분 -> 빙판 및 시간 정지 기능
 

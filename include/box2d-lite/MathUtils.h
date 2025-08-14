@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -27,12 +27,17 @@ struct Vec2
 	void Set(float x_, float y_) { x = x_; y = y_; }
 
 	Vec2 operator -() { return Vec2(-x, -y); }
-	
+
+	bool operator == (const Vec2& v)
+	{
+		return (x == v.x) && (y == v.y);
+	}
+
 	void operator += (const Vec2& v)
 	{
 		x += v.x; y += v.y;
 	}
-	
+
 	void operator -= (const Vec2& v)
 	{
 		x -= v.x; y -= v.y;
@@ -75,8 +80,8 @@ struct Mat22
 		float det = a * d - b * c;
 		assert(det != 0.0f);
 		det = 1.0f / det;
-		B.col1.x =  det * d;	B.col2.x = -det * b;
-		B.col1.y = -det * c;	B.col2.y =  det * a;
+		B.col1.x = det * d;	B.col2.x = -det * b;
+		B.col1.y = -det * c;	B.col2.y = det * a;
 		return B;
 	}
 

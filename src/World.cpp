@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -23,6 +23,7 @@ typedef pair<ArbiterKey, Arbiter> ArbPair;
 bool World::accumulateImpulses = true;
 bool World::warmStarting = true;
 bool World::positionCorrection = true;
+bool World::Moter = true;
 
 void World::Add(Body* body)
 {
@@ -80,6 +81,7 @@ void World::BroadPhase()
 
 void World::Step(float dt)
 {
+	//printf("debug - step \n");
 	float inv_dt = dt > 0.0f ? 1.0f / dt : 0.0f;
 
 	// Determine overlapping bodies and update contact points.
@@ -88,24 +90,35 @@ void World::Step(float dt)
 	// Integrate forces.
 	for (int i = 0; i < (int)bodies.size(); ++i)
 	{
+		//printf("debug - step-force \n");
 		Body* b = bodies[i];
 
 		if (b->invMass == 0.0f)
 			continue;
 
+		//Vec2 TestFor_oldVelocity = b->velocity; // DEBUG
+
 		b->velocity += dt * (gravity + b->invMass * b->force);
 		b->angularVelocity += dt * b->invI * b->torque;
+
+		if (b->isItExist == false) {
+			b->velocity.Set(0, 0);
+			b->angularVelocity = 0.0f;
+			//b->position.Set(20, 20);
+		}
+		//if (b->velocity == TestFor_oldVelocity) { printf("ERROR - No Change of b->velocity \n"); }
 	}
 
 	// Perform pre-steps.
 	for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
 	{
+		//printf("debug - ReadyPreStep \n");
 		arb->second.PreStep(inv_dt);
 	}
 
 	for (int i = 0; i < (int)joints.size(); ++i)
 	{
-		joints[i]->PreStep(inv_dt);	
+		joints[i]->PreStep(inv_dt);
 	}
 
 	// Perform iterations
@@ -113,7 +126,13 @@ void World::Step(float dt)
 	{
 		for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
 		{
-			arb->second.ApplyImpulse();
+			//Body* dummy[2]; // 초기화되지 않았습니다.
+			//arb->second.ApplyImpulse();
+			//Body** deadBodyStorage = {NULL,};
+			arb->second.ApplyImpulse(deadBodyStorage, 200);
+
+			// 요기서 메모리를 쌓을까요
+			//arb->second.ApplyImpulse(&deadBodyStorage[0],200);
 		}
 
 		for (int j = 0; j < (int)joints.size(); ++j)
@@ -122,15 +141,27 @@ void World::Step(float dt)
 		}
 	}
 
+
+
 	// Integrate Velocities
 	for (int i = 0; i < (int)bodies.size(); ++i)
 	{
 		Body* b = bodies[i];
 
+		Vec2 TestFor_OldPosition = b->position;
+
 		b->position += dt * b->velocity;
 		b->rotation += dt * b->angularVelocity;
 
+
+		//if((b->position == TestFor_OldPosition) && !(b->velocity.x == 0 && b->velocity.y == 0)) { printf("ERROR - B->position change did not worked. \n"); }
+
 		b->force.Set(0.0f, 0.0f);
 		b->torque = 0.0f;
+	}
+
+	//Break Block
+	for (int i = 0; i < 200; i++) {
+		deadBodyStorage[i] = NULL;
 	}
 }

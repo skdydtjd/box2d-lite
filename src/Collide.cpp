@@ -4,11 +4,11 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
-
+#include <iostream>
 #include "box2d-lite/Arbiter.h"
 #include "box2d-lite/Body.h"
 
@@ -55,7 +55,7 @@ void Flip(FeaturePair& fp)
 }
 
 int ClipSegmentToLine(ClipVertex vOut[2], ClipVertex vIn[2],
-					  const Vec2& normal, float offset, char clipEdge)
+	const Vec2& normal, float offset, char clipEdge)
 {
 	// Start with no output points
 	int numOut = 0;
@@ -93,7 +93,7 @@ int ClipSegmentToLine(ClipVertex vOut[2], ClipVertex vIn[2],
 }
 
 static void ComputeIncidentEdge(ClipVertex c[2], const Vec2& h, const Vec2& pos,
-								const Mat22& Rot, const Vec2& normal)
+	const Mat22& Rot, const Vec2& normal)
 {
 	// The normal is from the reference box. Convert it
 	// to the incident boxe's frame and flip sign.
@@ -155,6 +155,7 @@ static void ComputeIncidentEdge(ClipVertex c[2], const Vec2& h, const Vec2& pos,
 // The normal points from A to B
 int Collide(Contact* contacts, Body* bodyA, Body* bodyB)
 {
+
 	// Setup
 	Vec2 hA = 0.5f * bodyA->width;
 	Vec2 hB = 0.5f * bodyB->width;
@@ -230,60 +231,60 @@ int Collide(Contact* contacts, Body* bodyA, Body* bodyB)
 	switch (axis)
 	{
 	case FACE_A_X:
-		{
-			frontNormal = normal;
-			front = Dot(posA, frontNormal) + hA.x;
-			sideNormal = RotA.col2;
-			float side = Dot(posA, sideNormal);
-			negSide = -side + hA.y;
-			posSide =  side + hA.y;
-			negEdge = EDGE3;
-			posEdge = EDGE1;
-			ComputeIncidentEdge(incidentEdge, hB, posB, RotB, frontNormal);
-		}
-		break;
+	{
+		frontNormal = normal;
+		front = Dot(posA, frontNormal) + hA.x;
+		sideNormal = RotA.col2;
+		float side = Dot(posA, sideNormal);
+		negSide = -side + hA.y;
+		posSide = side + hA.y;
+		negEdge = EDGE3;
+		posEdge = EDGE1;
+		ComputeIncidentEdge(incidentEdge, hB, posB, RotB, frontNormal);
+	}
+	break;
 
 	case FACE_A_Y:
-		{
-			frontNormal = normal;
-			front = Dot(posA, frontNormal) + hA.y;
-			sideNormal = RotA.col1;
-			float side = Dot(posA, sideNormal);
-			negSide = -side + hA.x;
-			posSide =  side + hA.x;
-			negEdge = EDGE2;
-			posEdge = EDGE4;
-			ComputeIncidentEdge(incidentEdge, hB, posB, RotB, frontNormal);
-		}
-		break;
+	{
+		frontNormal = normal;
+		front = Dot(posA, frontNormal) + hA.y;
+		sideNormal = RotA.col1;
+		float side = Dot(posA, sideNormal);
+		negSide = -side + hA.x;
+		posSide = side + hA.x;
+		negEdge = EDGE2;
+		posEdge = EDGE4;
+		ComputeIncidentEdge(incidentEdge, hB, posB, RotB, frontNormal);
+	}
+	break;
 
 	case FACE_B_X:
-		{
-			frontNormal = -normal;
-			front = Dot(posB, frontNormal) + hB.x;
-			sideNormal = RotB.col2;
-			float side = Dot(posB, sideNormal);
-			negSide = -side + hB.y;
-			posSide =  side + hB.y;
-			negEdge = EDGE3;
-			posEdge = EDGE1;
-			ComputeIncidentEdge(incidentEdge, hA, posA, RotA, frontNormal);
-		}
-		break;
+	{
+		frontNormal = -normal;
+		front = Dot(posB, frontNormal) + hB.x;
+		sideNormal = RotB.col2;
+		float side = Dot(posB, sideNormal);
+		negSide = -side + hB.y;
+		posSide = side + hB.y;
+		negEdge = EDGE3;
+		posEdge = EDGE1;
+		ComputeIncidentEdge(incidentEdge, hA, posA, RotA, frontNormal);
+	}
+	break;
 
 	case FACE_B_Y:
-		{
-			frontNormal = -normal;
-			front = Dot(posB, frontNormal) + hB.y;
-			sideNormal = RotB.col1;
-			float side = Dot(posB, sideNormal);
-			negSide = -side + hB.x;
-			posSide =  side + hB.x;
-			negEdge = EDGE2;
-			posEdge = EDGE4;
-			ComputeIncidentEdge(incidentEdge, hA, posA, RotA, frontNormal);
-		}
-		break;
+	{
+		frontNormal = -normal;
+		front = Dot(posB, frontNormal) + hB.y;
+		sideNormal = RotB.col1;
+		float side = Dot(posB, sideNormal);
+		negSide = -side + hB.x;
+		posSide = side + hB.x;
+		negEdge = EDGE2;
+		posEdge = EDGE4;
+		ComputeIncidentEdge(incidentEdge, hA, posA, RotA, frontNormal);
+	}
+	break;
 	}
 
 	// clip other face with 5 box planes (1 face plane, 4 edge planes)
@@ -299,7 +300,7 @@ int Collide(Contact* contacts, Body* bodyA, Body* bodyB)
 		return 0;
 
 	// Clip to negative box side 1
-	np = ClipSegmentToLine(clipPoints2, clipPoints1,  sideNormal, posSide, posEdge);
+	np = ClipSegmentToLine(clipPoints2, clipPoints1, sideNormal, posSide, posEdge);
 
 	if (np < 2)
 		return 0;
@@ -325,5 +326,6 @@ int Collide(Contact* contacts, Body* bodyA, Body* bodyB)
 		}
 	}
 
+	//printf("Debug - Collide - %d \n", numContacts);
 	return numContacts;
 }

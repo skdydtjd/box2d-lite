@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -26,6 +26,9 @@ Body::Body()
 	invMass = 0.0f;
 	I = FLT_MAX;
 	invI = 0.0f;
+	isBreakAble = true;
+	impulseLimit = 400.0f;
+	isItExist = true;
 }
 
 void Body::Set(const Vec2& w, float m)
@@ -40,7 +43,8 @@ void Body::Set(const Vec2& w, float m)
 
 	width = w;
 	mass = m;
-
+	impulseLimit = 400.0f;
+	isItExist = true;
 	if (mass < FLT_MAX)
 	{
 		invMass = 1.0f / mass;
@@ -49,8 +53,15 @@ void Body::Set(const Vec2& w, float m)
 	}
 	else
 	{
+		//impulseLimit = 3000.0f;
+
 		invMass = 0.0f;
 		I = FLT_MAX;
 		invI = 0.0f;
+		isBreakAble = false;
 	}
+}
+
+void Body::setPosition2(Vec2& v) {
+	position = v;
 }

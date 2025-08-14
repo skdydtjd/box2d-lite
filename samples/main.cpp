@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -30,8 +30,10 @@ namespace
 
 	Body bodies[200];
 	Joint joints[100];
-	
+
 	Body* bomb = NULL;
+	Body* moter = NULL;			//¸ğÅÍ Body
+	static bool moterOper = false;		//¸ğÅÍ È¸Àü°ü·Ã bool
 
 	float timeStep = 1.0f / 60.0f;
 	int iterations = 10;
@@ -48,9 +50,9 @@ namespace
 	float pan_y = 8.0f;
 
 	World world(gravity, iterations);
-	
-	//ìƒíƒœ ì €ì¥ ë³€ìˆ˜ ì¶”ê°€
-	// (ì¼ì‹œì •ì§€)
+
+	//»óÅÂ ÀúÀå º¯¼ö Ãß°¡
+	// (ÀÏ½ÃÁ¤Áö)
 	bool flag = false;
 }
 
@@ -77,11 +79,12 @@ static void DrawBody(Body* body)
 	Vec2 h = 0.5f * body->width;
 
 	Vec2 v1 = x + R * Vec2(-h.x, -h.y);
-	Vec2 v2 = x + R * Vec2( h.x, -h.y);
-	Vec2 v3 = x + R * Vec2( h.x,  h.y);
-	Vec2 v4 = x + R * Vec2(-h.x,  h.y);
-
-	if (body == bomb)
+	Vec2 v2 = x + R * Vec2(h.x, -h.y);
+	Vec2 v3 = x + R * Vec2(h.x, h.y);
+	Vec2 v4 = x + R * Vec2(-h.x, h.y);
+	if (body->isItExist == false)
+		glColor3f(1.3f, 0.7f, 0.3f);
+	else if (body == bomb)
 		glColor3f(0.4f, 0.9f, 0.4f);
 	else
 		glColor3f(0.8f, 0.8f, 0.9f);
@@ -117,6 +120,30 @@ static void DrawJoint(Joint* joint)
 	glEnd();
 }
 
+static void test()
+{
+
+	Body* tb = NULL;
+	tb = bodies + numBodies;
+	tb->Set(Vec2(1.0f, 1.0f), 50.0f);
+	world.World::Add(tb);
+	++numBodies;
+
+	tb->position.Set(-10.0f, 10.0f);
+	tb->velocity = Vec2(Random(20.0f, 50.0f), 0.0f);
+	tb->impulseLimit = 600;
+
+	Body* tb2 = NULL;
+	tb2 = bodies + numBodies;
+	tb2->Set(Vec2(1.0f, 1.0f), 50.0f);
+	world.Add(tb2);
+	++numBodies;
+
+	tb2->position.Set(10.0f, 10.0f);
+	tb2->velocity = Vec2(Random(-50.0f, -0.01f), 0.0f);
+	tb2->impulseLimit = 600;
+}
+
 static void LaunchBomb()
 {
 	if (!bomb)
@@ -132,6 +159,35 @@ static void LaunchBomb()
 	bomb->rotation = Random(-1.5f, 1.5f);
 	bomb->velocity = -1.5f * bomb->position;
 	bomb->angularVelocity = Random(-20.0f, 20.0f);
+	bomb->isItExist = true;
+}
+
+//¸ğÅÍ »ı¼º LaunchBomb()ÀÇ Çü½ÄÀ» °¡Á®¿È.
+//ÀÔ·Â ÆÄ¶ó¹ÌÅÍ´Â È¸ÀüÀ» ½ÃÅ³Áö ¸»Áö¸¦ °áÁ¤ÇÏ°Ô ÇÔ.
+static void const Moter(bool oper)
+{
+	if (!moter)
+	{
+		moter = bodies + numBodies;
+		moter->Set(Vec2(1.0f, 1.0f), FLT_MAX);
+		moter->friction = 100.0f;
+		world.Add(moter);
+		++numBodies;
+	}
+	moter->position.Set((1.0f, 1.0f), 3.0f);
+
+	if (oper == false)
+	{
+		moter->angularVelocity = 0.0f;
+		World::Moter = false;
+	}
+	else
+	{
+		moter->angularVelocity = 100.0f;
+		World::Moter = true;
+	}
+
+	float rotation = (moter->mass * moter->angularVelocity) * (1 / timeStep);
 }
 
 // Single box
@@ -145,6 +201,7 @@ static void Demo1(Body* b, Joint* j)
 	b->Set(Vec2(1.0f, 1.0f), 200.0f);
 	b->position.Set(0.0f, 4.0f);
 	world.Add(b);
+	b->impulseLimit = 900.0f;
 	++b; ++numBodies;
 }
 
@@ -209,7 +266,7 @@ static void Demo3(Body* b, Joint* j)
 	world.Add(b);
 	++b; ++numBodies;
 
-	float friction[5] = {0.75f, 0.5f, 0.35f, 0.1f, 0.0f};
+	float friction[5] = { 0.75f, 0.5f, 0.35f, 0.1f, 0.0f };
 	for (int i = 0; i < 5; ++i)
 	{
 		b->Set(Vec2(0.5f, 0.5f), 25.0f);
@@ -351,7 +408,7 @@ static void Demo7(Body* b, Joint* j)
 
 	for (int i = 0; i < numPlanks; ++i)
 	{
-		j->Set(bodies+i, bodies+i+1, Vec2(-9.125f + 1.25f * i, 5.0f));
+		j->Set(bodies + i, bodies + i + 1, Vec2(-9.125f + 1.25f * i, 5.0f));
 		j->softness = softness;
 		j->biasFactor = biasFactor;
 
@@ -452,7 +509,7 @@ static void Demo9(Body* b, Joint* j)
 	b->rotation = 0.0f;
 	world.Add(b);
 
-	Body * b1 = b;
+	Body* b1 = b;
 	++b;
 	++numBodies;
 
@@ -499,7 +556,7 @@ static void Demo9(Body* b, Joint* j)
 	}
 }
 
-void (*demos[])(Body* b, Joint* j) = {Demo1, Demo2, Demo3, Demo4, Demo5, Demo6, Demo7, Demo8, Demo9};
+void (*demos[])(Body* b, Joint* j) = { Demo1, Demo2, Demo3, Demo4, Demo5, Demo6, Demo7, Demo8, Demo9 };
 const char* demoStrings[] = {
 	"Demo 1: A Single Box",
 	"Demo 2: Simple Pendulum",
@@ -509,14 +566,16 @@ const char* demoStrings[] = {
 	"Demo 6: A Teeter",
 	"Demo 7: A Suspension Bridge",
 	"Demo 8: Dominos",
-	"Demo 9: Multi-pendulum"};
+	"Demo 9: Multi-pendulum" };
 
 static void InitDemo(int index)
 {
+
 	world.Clear();
 	numBodies = 0;
 	numJoints = 0;
 	bomb = NULL;
+	moter = NULL;		//Demo º¯°æ ½Ã °°ÀÌ ÃÊ±âÈ­
 
 	demoIndex = index;
 	demos[index](bodies, joints);
@@ -563,15 +622,24 @@ static void Keyboard(GLFWwindow* window, int key, int scancode, int action, int 
 	case GLFW_KEY_SPACE:
 		LaunchBomb();
 		break;
-	
-	// ì¼ì‹œì •ì§€ ê¸°ëŠ¥ ì¶”ê°€ (sí‚¤ë¥¼ ëˆ„ë¥¼ ì‹œ)
+
+	case GLFW_KEY_M:		//¸ğÅÍ ÀÛµ¿¿ë
+		moterOper = !moterOper;
+		Moter(moterOper);
+		break;
+
+
+		// ÀÏ½ÃÁ¤Áö ±â´É Ãß°¡ (sÅ°¸¦ ´©¸¦ ½Ã)
 	case GLFW_KEY_S:
 		flag = !flag;
 		break;
 
-	// ë¹™íŒ ê¸°ëŠ¥ ì¶”ê°€ (ií‚¤ë¥¼ ëˆ„ë¥¼ ì‹œ)
+		// ºùÆÇ ±â´É Ãß°¡ (iÅ°¸¦ ´©¸¦ ½Ã)
 	case GLFW_KEY_I:
 		Arbiter::flag2 = !Arbiter::flag2;
+		break;
+	case GLFW_KEY_T:
+		test();
 		break;
 	}
 }
@@ -646,7 +714,7 @@ int main(int, char**)
 	glViewport(0, 0, width, height);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	
+
 	float aspect = float(width) / float(height);
 	if (width >= height)
 	{
@@ -686,20 +754,27 @@ int main(int, char**)
 
 		sprintf(buffer, "(W)arm Starting %s", World::warmStarting ? "ON" : "OFF");
 		DrawText(5, 125, buffer);
-		
-		// ì¼ì‹œì •ì§€ ë¬¸êµ¬ ì¶”ê°€
+
+		// ÀÏ½ÃÁ¤Áö ¹®±¸ Ãß°¡
 		sprintf(buffer, "(S)top %s", flag ? "ON" : "OFF");
 		DrawText(5, 155, buffer);
 
-		// ë¹™íŒ ë¬¸êµ¬ ì¶”ê°€
+		// ºùÆÇ ¹®±¸ Ãß°¡
 		sprintf(buffer, "(I)ce plane %s", Arbiter::flag2 ? "ON" : "OFF");
 		DrawText(5, 185, buffer);
+
+		//¸ğÅÍ ÀÛµ¿ ¹®±¸, 3¹øÂ° ÆÄ¶ó¹ÌÅÍ´Â World¿¡ »ı¼ºÇØ¾ß ÇÔ.
+		sprintf(buffer, "(M)oter %s", World::Moter ? "ON" : "OFF");
+		DrawText(5, 215, buffer);
+
+		sprintf(buffer, "(T)hrow 2 Body");
+		DrawText(5, 245, buffer);
 
 		glMatrixMode(GL_MODELVIEW);
 		glLoadIdentity();
 
-		
-		// flagì— ë”°ë¥¸ ì¼ì‹œì •ì§€ ì—¬ë¶€
+
+		// flag¿¡ µû¸¥ ÀÏ½ÃÁ¤Áö ¿©ºÎ
 		if (flag == true)
 		{
 			world.Step(0);
@@ -709,7 +784,7 @@ int main(int, char**)
 			world.Step(timeStep);
 		}
 
-		
+
 		for (int i = 0; i < numBodies; ++i)
 			DrawBody(bodies + i);
 

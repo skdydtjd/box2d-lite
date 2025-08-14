@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -13,7 +13,7 @@
 #include "box2d-lite/Body.h"
 #include "box2d-lite/World.h"
 
-//Arbiter í—¤ë”íŒŒì¼ì— ì„ ì–¸í–ˆë˜ ë³€ìˆ˜ë¥¼ ë¶ˆëŸ¬ì˜´
+//Arbiter Çì´õÆÄÀÏ¿¡ ¼±¾ðÇß´ø º¯¼ö¸¦ ºÒ·¯¿È
 bool Arbiter::flag2 = false;
 
 Arbiter::Arbiter(Body* b1, Body* b2)
@@ -29,10 +29,16 @@ Arbiter::Arbiter(Body* b1, Body* b2)
 		body2 = b1;
 	}
 
-	numContacts = Collide(contacts, body1, body2);
-	
-	// flag2ì— ë”°ë¥¸ ë¹™íŒ 
-	if(flag2 == true)
+	//numContacts = Collide(contacts, body1, body2);
+	numContacts = 0; // NEW!
+	if (body1->isItExist && body2->isItExist) {
+		//printf("meow");
+		numContacts = Collide(contacts, body1, body2);
+	}
+
+
+	// flag2¿¡ µû¸¥ ºùÆÇ 
+	if (flag2 == true)
 	{
 		friction = 0;
 	}
@@ -115,7 +121,7 @@ void Arbiter::PreStep(float inv_dt)
 		float rt2 = Dot(r2, tangent);
 		float kTangent = body1->invMass + body2->invMass;
 		kTangent += body1->invI * (Dot(r1, r1) - rt1 * rt1) + body2->invI * (Dot(r2, r2) - rt2 * rt2);
-		c->massTangent = 1.0f /  kTangent;
+		c->massTangent = 1.0f / kTangent;
 
 		c->bias = -k_biasFactor * inv_dt * Min(0.0f, c->separation + k_allowedPenetration);
 
@@ -133,8 +139,10 @@ void Arbiter::PreStep(float inv_dt)
 	}
 }
 
-void Arbiter::ApplyImpulse()
+//void Arbiter::ApplyImpulse()
+void Arbiter::ApplyImpulse(Body** deadBodyStoragePtr, int numStorage)
 {
+	//printf("debug - ApplyImpulse \n");
 	Body* b1 = body1;
 	Body* b2 = body2;
 
@@ -205,4 +213,41 @@ void Arbiter::ApplyImpulse()
 		b2->velocity += b2->invMass * Pt;
 		b2->angularVelocity += b2->invI * Cross(c->r2, Pt);
 	}
+
+	for (int i = 0; i < 2; i++) {
+		Body* targetBody[2] = { body1, body2 };
+
+		if (targetBody[i]->isBreakAble == false) continue;
+		if (targetBody[i]->impulseLimit < Max(contacts[0].Pn, contacts[1].Pn)) {
+			printf("[Debug] OverImpulse detected : %f \n", Max(contacts[0].Pn, contacts[1].Pn));
+
+			//World::KillBody(targetBody[i]);
+
+			for (int k = 0; k < 200; k++) {
+				if (deadBodyStoragePtr[k] == NULL) {
+					deadBodyStoragePtr[k] = targetBody[i];
+					printf("[DEBUG] Body Killed. \n");
+
+					//targetBody[i]->setPosition2(Vec2(2, 2));
+					//targetBody[i]->position.Set(2, 2);
+
+					//targetBody[i]->isItExist = false;
+					targetBody[i]->isItExist = false;
+
+					break;
+				}
+				if (deadBodyStoragePtr[k] == targetBody[i])
+				{
+					//printf("[DEBUG] Body Checking...");
+					break; // ÀÌ¹Ì Á¦°ÅÇÒ ¸ñ·Ï¿¡ ±â·ÏµÇ¾î ÀÖ½À´Ï´Ù.
+				}
+
+				if (k >= numStorage) {
+					printf("<!>ERROR<!> Cannot Kill Body Anymore! : deadBodyStoragePtr is full.");
+					break;
+				}
+			}
+		}
+	}
+
 }

@@ -4,8 +4,8 @@
 * Permission to use, copy, modify, distribute and sell this software
 * and its documentation for any purpose is hereby granted without fee,
 * provided that the above copyright notice appear in all copies.
-* Erin Catto makes no representations about the suitability 
-* of this software for any purpose.  
+* Erin Catto makes no representations about the suitability
+* of this software for any purpose.
 * It is provided "as is" without express or implied warranty.
 */
 
@@ -64,14 +64,15 @@ struct ArbiterKey
 
 struct Arbiter
 {
-	enum {MAX_POINTS = 2};
+	enum { MAX_POINTS = 2 };
 
 	Arbiter(Body* b1, Body* b2);
 
 	void Update(Contact* contacts, int numContacts);
 
 	void PreStep(float inv_dt);
-	void ApplyImpulse();
+	//void ApplyImpulse();
+	void ApplyImpulse(Body**, int); // ¹ÙµğÀÇ Æ÷ÀÎÅÍ¸¦ ÀúÀåÇÏ´Â ¹è¿­À» ¸Å°³º¯¼ö·Î ¹Ş½À´Ï´Ù. // Okay
 
 	Contact contacts[MAX_POINTS];
 	int numContacts;
@@ -81,9 +82,9 @@ struct Arbiter
 
 	// Combined friction
 	float friction;
-	
-	// ìƒíƒœ ì €ì¥ ë³€ìˆ˜ ì¶”ê°€
-	// (ë¹™íŒ)
+
+	// »óÅÂ ÀúÀå º¯¼ö Ãß°¡
+	// (ºùÆÇ)
 	static bool flag2;
 };
 

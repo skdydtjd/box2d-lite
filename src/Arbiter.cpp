@@ -139,6 +139,7 @@ void Arbiter::PreStep(float inv_dt)
 	}
 }
 
+//기존의 함수인자 타입 변경
 //void Arbiter::ApplyImpulse()
 void Arbiter::ApplyImpulse(Body** deadBodyStoragePtr, int numStorage)
 {

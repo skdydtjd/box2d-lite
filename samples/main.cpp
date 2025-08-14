@@ -769,6 +769,7 @@ int main(int, char**)
 		sprintf(buffer, "(M)oter %s", World::Moter ? "ON" : "OFF");
 		DrawText(5, 215, buffer);
 
+		// 두 강체를 던지는 문구
 		sprintf(buffer, "(T)hrow 2 Body");
 		DrawText(5, 245, buffer);
 

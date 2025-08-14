@@ -23,7 +23,7 @@ typedef pair<ArbiterKey, Arbiter> ArbPair;
 bool World::accumulateImpulses = true;
 bool World::warmStarting = true;
 bool World::positionCorrection = true;
-bool World::Moter = true;
+bool World::Moter = true; // ë³€ìˆ˜ ê°€ì ¸ì˜´, ì´ˆê¸°í™”
 
 void World::Add(Body* body)
 {
@@ -126,12 +126,12 @@ void World::Step(float dt)
 	{
 		for (ArbIter arb = arbiters.begin(); arb != arbiters.end(); ++arb)
 		{
-			//Body* dummy[2]; // ÃÊ±âÈ­µÇÁö ¾Ê¾Ò½À´Ï´Ù.
+			//Body* dummy[2]; // ì´ˆê¸°í™”ë˜ì§€ ì•Šì•˜ìŠµë‹ˆë‹¤.
 			//arb->second.ApplyImpulse();
 			//Body** deadBodyStorage = {NULL,};
 			arb->second.ApplyImpulse(deadBodyStorage, 200);
 
-			// ¿ä±â¼­ ¸Þ¸ð¸®¸¦ ½×À»±î¿ä
+			// ìš”ê¸°ì„œ ë©”ëª¨ë¦¬ë¥¼ ìŒ“ì„ê¹Œìš”
 			//arb->second.ApplyImpulse(&deadBodyStorage[0],200);
 		}
 

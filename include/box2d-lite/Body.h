@@ -40,9 +40,10 @@ struct Body
 	float mass, invMass;
 	float I, invI;
 
-	float impulseLimit;
-	bool isBreakAble;
-	bool isItExist = true;
+	// 추가한 변수들
+	float impulseLimit; // 최대한 견딜 수 있는 충격량
+	bool isBreakAble; // 충격을 받고 파괴될 수 있는지 여부
+	bool isItExist = true; // 강체가 충격에 의해 파괴되었는지 생사 여부
 };
 
 #endif

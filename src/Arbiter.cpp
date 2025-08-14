@@ -13,7 +13,7 @@
 #include "box2d-lite/Body.h"
 #include "box2d-lite/World.h"
 
-//Arbiter Çì´õÆÄÀÏ¿¡ ¼±¾ğÇß´ø º¯¼ö¸¦ ºÒ·¯¿È
+//Arbiter í—¤ë”íŒŒì¼ì— ì„ ì–¸í–ˆë˜ ë³€ìˆ˜ë¥¼ ë¶ˆëŸ¬ì˜´
 bool Arbiter::flag2 = false;
 
 Arbiter::Arbiter(Body* b1, Body* b2)
@@ -37,7 +37,7 @@ Arbiter::Arbiter(Body* b1, Body* b2)
 	}
 
 
-	// flag2¿¡ µû¸¥ ºùÆÇ 
+	// flag2ì— ë”°ë¥¸ ë¹™íŒ 
 	if (flag2 == true)
 	{
 		friction = 0;
@@ -214,6 +214,7 @@ void Arbiter::ApplyImpulse(Body** deadBodyStoragePtr, int numStorage)
 		b2->angularVelocity += b2->invI * Cross(c->r2, Pt);
 	}
 
+	// ì¶©ë’ íŒì • ì¶”ê°€
 	for (int i = 0; i < 2; i++) {
 		Body* targetBody[2] = { body1, body2 };
 
@@ -239,7 +240,7 @@ void Arbiter::ApplyImpulse(Body** deadBodyStoragePtr, int numStorage)
 				if (deadBodyStoragePtr[k] == targetBody[i])
 				{
 					//printf("[DEBUG] Body Checking...");
-					break; // ÀÌ¹Ì Á¦°ÅÇÒ ¸ñ·Ï¿¡ ±â·ÏµÇ¾î ÀÖ½À´Ï´Ù.
+					break; // ì´ë¯¸ ì œê±°í•  ëª©ë¡ì— ê¸°ë¡ë˜ì–´ ìˆìŠµë‹ˆë‹¤.
 				}
 
 				if (k >= numStorage) {

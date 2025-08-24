@@ -43,3 +43,26 @@ __Box2D 코드 분석 및 기능 추가__
 시간 정지 기능 
 
 -> sample 파일에 main.cpp에 물리 시간을 조정할 flag변수 및 키입력 구문, if문 추가
+
+
+
+
+__두 강채 던지기 영상__
+
+https://github.com/user-attachments/assets/01ff8fdc-5565-47df-8520-7b6c340f9b5b
+
+__모터 영상__
+
+https://github.com/user-attachments/assets/254b79a7-c15f-436b-9dda-ba350d536171
+
+__빙판 영상__
+
+https://github.com/user-attachments/assets/526bca8e-48bd-41d9-beba-6cdf73260fce
+
+__일시정지 영상__
+
+https://github.com/user-attachments/assets/2facf76c-8e89-4bd3-91d1-cb861df312e5
+
+__충격 판정 영상__
+
+https://github.com/user-attachments/assets/b94ac2b2-2cbe-4c1c-ba2c-41953bf6c58c

@@ -13,7 +13,7 @@ Box2D-Lite is a small 2D physics engine. It was developed for the [2006 GDC Phys
 
 # 2020 프로그래밍 기초 2 프로젝트
 
-__Box2D 코드 분석 및 기능 추가__
+__Box2D 엔진 코드 분석 및 기능 추가__
 
 # 프로젝트 인원
 

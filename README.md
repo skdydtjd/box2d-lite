@@ -38,7 +38,11 @@ _2020.10.22 ~ 2020 12.07_
 
 빙판 기능 
 
--> include 파일의 Arbiter.h에 마찰력 변수를 조정할 flag 변수 추가,  src 파일의 Arbiter.cpp에 flag변수 가져옴과 flag변수를 관리 할 if문 추가,  sample  파일의 main.cpp에 키 입력 구문 추가
+-> include 파일의 Arbiter.h에 마찰력 변수를 조정할 flag 변수 추가
+
+-> src 파일의 Arbiter.cpp에 flag변수 가져옴과 flag변수를 관리 할 if문 추가
+
+-> sample 파일의 main.cpp에 키 입력 구문 추가
 
 시간 정지 기능 
 

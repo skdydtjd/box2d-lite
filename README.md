@@ -13,8 +13,11 @@ Box2D-Lite is a small 2D physics engine. It was developed for the [2006 GDC Phys
 
 # 2020 프로그래밍 기초 2 프로젝트
 
-공통 -- (코드 분석)
+__Box2D 코드 분석 및 기능 추가__
 
+# 프로젝트 인원
+
+__공통 -- (코드 분석)__
 
 팀장 - 20193486 박태윤 (충돌 판정 구현)
 
@@ -24,9 +27,9 @@ Box2D-Lite is a small 2D physics engine. It was developed for the [2006 GDC Phys
 
 팀원 - 20192447 김지아 (두 강체를 던지는 기능 구현)
 
-_2020.10.22 ~ 2020 12.07_
+# 프로젝트 진행 기간
 
-__Box2D 코드 분석 및 기능 추가__
+_2020.10.22 ~ 2020 12.07_
 
 
 # 코드 분석 및 추가, 개선한 부분
